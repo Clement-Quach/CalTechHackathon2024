@@ -30,6 +30,10 @@ public class App {
     petList.add(new Pet(i));
   }
 
+  public int getPet() {
+    return petList.get(currentPet).petID;
+  }
+
   /**
    * pass in the pet number you want to move to. ie, pet 1, pet 2, pet 3. this
    * starts at 1.
