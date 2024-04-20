@@ -26,10 +26,21 @@ public class App {
     myList.add(generator.getQuest(1));
   }
 
+  /**
+   * adds a pet to the list with an id. this id will determine what the pet looks
+   * like
+   * 
+   * @param i the id of the pet.
+   */
   public void addPet(int i) {
     petList.add(new Pet(i));
   }
 
+  /**
+   * gets the pet that we currently point to.
+   * 
+   * @return the ID of the current pet.
+   */
   public int getPet() {
     return petList.get(currentPet).petID;
   }
@@ -60,18 +71,37 @@ public class App {
     rewardSystem.completeTask(temp);
   }
 
-  public void feedPet(int i) {
+  /**
+   * feed the pet a snack. feeds only if
+   * you have a treat
+   *
+   */
+  public void feedPet() {
     if (this.rewardSystem.getNumTreats() > 0) {
       petList.get(currentPet).feedPet(1);
       this.rewardSystem.useTreat();
     }
   }
 
+  /**
+   * returns an integer that is how hungry the current pet is.
+   * 0 is very sad
+   * 10 is neutral
+   * 20 is happy
+   * 
+   * @return how happy the current pet is
+   */
   public int getPetHappiness() {
     return petList.get(currentPet).getHunger();
   }
 
+  /**
+   * see how many treats you are able to give the pet
+   * 
+   * @return
+   */
   public int getNumTreats() {
+    System.out.println(this.rewardSystem.getNumTreats());
     return this.rewardSystem.getNumTreats();
   }
 
@@ -83,8 +113,20 @@ public class App {
     return myList.getChoreAt(i);
   }
 
+  public void removeChore(Chore c) {
+    myList.remove(c);
+  }
+
   public Chore[] listShow() {
     return myList.getList();
   }
 
+  public void addTreat() {
+    rewardSystem.giveNewTreat();
+  }
+
+  public int findChore(Chore c) {
+    int i = myList.findChore(c);
+    return i;
+  }
 }

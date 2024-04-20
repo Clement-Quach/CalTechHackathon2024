@@ -14,6 +14,7 @@ public class GUI {
   private App app;
   private JPanel questLogPanel; // Panel for quest log content
   private JButton closeQuestLogButton; // Close button for quest log
+  private JLabel snackCountLabel; // Label to display snack count
 
   // Main GUI
   public GUI(App app) {
@@ -40,6 +41,7 @@ public class GUI {
           createQuestLogPanel();
         }
         showQuestLogPanel(); // Show or hide quest log panel
+
       }
 
       @Override
@@ -68,10 +70,24 @@ public class GUI {
     // Top bar
     topBar.setLayout(new FlowLayout(FlowLayout.LEFT));
     topBar.setPreferredSize(new Dimension(1600, 100));
+
+    GridBagConstraints snackCountConstraints = new GridBagConstraints();
+
+    snackCountConstraints.anchor = GridBagConstraints.NORTHEAST; // Anchor to top and east
+    snackCountConstraints.insets = new Insets(10, 10, 10, 10); // Add some padding
+
+    snackCountLabel = new JLabel("Snacks: " + app.getNumTreats());
+    topBar.add(snackCountLabel);
+
     topBar.add(questLog);
 
     // Adding components to frame
     mainFrame.add(topBar, BorderLayout.NORTH);
+  }
+
+  private void completeChore(Chore c) {
+    this.app.completeTask(app.findChore(c));
+    snackCountLabel.setText("Snacks: " + app.getNumTreats());
   }
 
   private void createQuestLogPanel() {
@@ -87,18 +103,23 @@ public class GUI {
     // Add close button to quest log panel
     questLogPanel.add(closeQuestLogButton);
 
-    // Loop through each chore in the quest log (similar to OpenQuestLog)
+    // Loop through each chore in the quest log
     for (Chore chore : app.listShow()) {
-      // Create labels and set properties (similar to OpenQuestLog)
-      JLabel nameLabel = new JLabel(chore.getName());
-      nameLabel.setForeground(new Color(chore.getRGB()[0], chore.getRGB()[1], chore.getRGB()[2]));
+      // Create a button with chore name
+      JButton choreButton = new JButton(chore.getName());
+      choreButton.addActionListener(e -> completeChore(chore)); // Print on click
+
+      // Set button properties (optional)
+      // choreButton.setForeground(new Color(chore.getRGB()[0], chore.getRGB()[1],
+      // chore.getRGB()[2]));
 
       String wrappedDescription = wrapTextByWords(chore.getDescription(), 20);
       JLabel descriptionLabel = new JLabel("<html>" + wrappedDescription + "</html>");
       descriptionLabel
-          .setPreferredSize(new Dimension(mainFrame.getWidth() - nameLabel.getPreferredSize().width - 20, 0));
+          .setPreferredSize(new Dimension(mainFrame.getWidth() - choreButton.getPreferredSize().width - 20, 0));
 
-      questLogPanel.add(nameLabel);
+      // Add components to questLogPanel
+      questLogPanel.add(choreButton);
       questLogPanel.add(descriptionLabel);
     }
 

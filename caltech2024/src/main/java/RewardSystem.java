@@ -29,4 +29,8 @@ public class RewardSystem {
     this.numOfBiscuts--;
   }
 
+  public void giveNewTreat() {
+    numOfBiscuts++;
+  }
+
 }

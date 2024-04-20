@@ -51,7 +51,13 @@ public class ChoresList {
    * complete the chore at index i
    */
   public void choreComplete(int i) {
-    list.get(i).setCompletion(true);
+    if (!list.get(i).getCompletion()) {
+      list.get(i).setCompletion(true);
+    }
+  }
+
+  public int findChore(Chore c) {
+    return list.indexOf(c);
   }
 
 }
