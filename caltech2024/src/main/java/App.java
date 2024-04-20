@@ -34,6 +34,10 @@ public class App {
     return petList.get(currentPet).petID;
   }
 
+  public int getListSize() {
+    return myList.getSize();
+  }
+
   /**
    * pass in the pet number you want to move to. ie, pet 1, pet 2, pet 3. this
    * starts at 1.
