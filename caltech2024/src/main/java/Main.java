@@ -11,6 +11,6 @@ public class Main {
         System.out.println("Hello world!");
 
         App app = new App();
-
+        GUI gui = new GUI();
     }
 }
