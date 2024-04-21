@@ -18,6 +18,7 @@ public class GUI {
   private ImageIcon poroSadIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_sad.png"));
   private ImageIcon poroNeutralIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_neutral.png"));
   //pets
+  private JPanel petHappiness = new JPanel();
   private JLabel poro = new JLabel();
   private JButton feedButton = new JButton();
   //others
@@ -106,6 +107,7 @@ public class GUI {
       public void mouseClicked(MouseEvent e) {
         app.feedPet(); //feed pet
         snackCountLabel.setText("Snacks: " + app.getNumTreats());
+        
       }
 
       @Override
