@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
 public class GUI {
 
@@ -29,6 +30,7 @@ public class GUI {
   private App app;
   private JPanel questLogPanel; // Panel for quest log content
   private JButton closeQuestLogButton; // Close button for quest log
+  private JLabel date;
   private JLabel snackCountLabel; // Label to display snack count
   Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
   private JButton addQuestButton;
@@ -96,8 +98,19 @@ public class GUI {
     snackCountLabel.setText("Snacks: " + app.getNumTreats());
     snackCountLabel.setIcon(taiyakiIcon);
     snackCountLabel.setBounds(64, 0, 160, 64);
+
+    date = new JLabel();
+    date.setText(app.getDay().toString());
+    date.setBounds((int) dim.getWidth() - 100, 30, 100, 30);
+
+    // add display counters
+    display.add(date, Integer.valueOf(1));
     display.add(snackCountLabel, Integer.valueOf(1));
 
+    Image image = backgroundImage.getImage(); // transform it
+    Image newimg = image.getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH); // scale it the smooth
+                                                                                                // way
+    backgroundImage = new ImageIcon(newimg); // transform it back
     background.setIcon(backgroundImage);
     background.setBounds(0, 0, dim.width, dim.height);
 
@@ -106,7 +119,7 @@ public class GUI {
     feedButton.setText("Feed");
     feedButton.setBounds(0, 0, 160, 48);
     feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,
-        dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
+        dim.height / 2 + dim.height / 3 - feedButton.getSize().height / 2);
     feedButton.addMouseListener(new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
@@ -143,12 +156,13 @@ public class GUI {
     // pass one day
     // Pass one day button
     passOneDayButton = new JButton("Pass One Day");
-    passOneDayButton.setBounds(0, 800, 100, 30);
+    passOneDayButton.setBounds((int) dim.getWidth() - 200, 60, 200, 30);
     passOneDayButton.addActionListener(e -> passDay());
 
     // switch pets
     switchPet = new JButton("change pet");
-    switchPet.setBounds(1200, 0, 100, 100);
+    switchPet.setBounds((int) dim.getWidth() - 100, (int) dim.getHeight() - 200, 100, 70);
+
     switchPet.addActionListener(e -> rotatePets());
 
     // Adding components to frame
@@ -207,6 +221,7 @@ public class GUI {
 
     app.generateNewSide();
     updateQuestLogPanel();
+    date.setText(app.getDay().toString());
 
   }
 
@@ -348,4 +363,5 @@ public class GUI {
     }
     return sb.toString().trim(); // Remove trailing space
   }
+
 }
