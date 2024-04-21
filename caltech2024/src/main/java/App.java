@@ -18,7 +18,7 @@ public class App {
 
   public App() {
     today = LocalDate.now();
-    pet = new Pet(1);
+    pet = new poro(1);
     petList.add(pet);
     petList.add(new Pet(2));
     petList.add(new Pet(3));
@@ -77,8 +77,8 @@ public class App {
    * 
    * @return the ID of the current pet.
    */
-  public int getPet() {
-    return petList.get(currentPet).petID;
+  public Pet getPet() {
+    return petList.get(currentPet);
   }
 
   public int getListSize() {

@@ -1,7 +1,14 @@
+import java.awt.Component;
+
+import javax.swing.ImageIcon;
+
 public class Pet {
   private int hunger = 10;
 
-  public final int petID;
+  private final int petID;
+  protected ImageIcon imageHappy;
+  protected ImageIcon imageSad;
+  protected ImageIcon imageNeutral;
 
   public Pet(int i) {
     petID = i;
@@ -33,4 +40,13 @@ public class Pet {
     return this.petID;
   }
 
+  public ImageIcon getHappyImage(){
+    return this.imageHappy;
+  }
+  public ImageIcon getSadImage(){
+    return this.imageSad;
+  }
+  public ImageIcon getNeutralImage(){
+    return this.imageNeutral;
+  }
 }
