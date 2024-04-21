@@ -30,8 +30,11 @@ public class Pet {
    */
   public void feedPet() {
     this.hunger += 1;
-    if (this.hunger >= 20) {
+    if (this.hunger >= 15) {
       this.mood = 3;
+
+    }
+    if (this.hunger >= 20) {
       this.hunger = 20;
     }
   }
