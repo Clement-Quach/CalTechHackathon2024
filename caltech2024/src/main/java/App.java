@@ -9,7 +9,7 @@ public class App {
   private RewardSystem rewardSystem;
   private SideQuestGenerator generator;
 
-  private final int petReduce = 2;
+  private final int petReduce = -2;
 
   /**
    * the current index of the pet we are dealing with.
@@ -19,8 +19,7 @@ public class App {
 
   public App() {
     today = LocalDate.now();
-    pet = new Pet(1);
-
+    pet = new poro(1);
     petList.add(pet);
     petList.add(new Pet(2));
     petList.add(new Pet(3));
@@ -49,6 +48,7 @@ public class App {
     today = today.plusDays(1);
     for (int i = 0; i < petList.size(); i++) {
       petList.get(i).feedPet(petReduce);
+      System.out.println(petList.get(i).getHunger());
     }
 
   }

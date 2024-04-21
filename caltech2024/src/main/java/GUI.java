@@ -5,7 +5,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 public class GUI {
-
   // Defining
   private JFrame mainFrame; // creates frame
 
@@ -15,14 +14,13 @@ public class GUI {
   private ImageIcon backgroundImage = new ImageIcon(this.getClass().getResource("/images/background.png")); // background
                                                                                                             // image
   private ImageIcon taiyakiIcon = new ImageIcon(this.getClass().getResource("/images/taiyaki.png")); // taiyaki image
-  // poro images
-  private ImageIcon poroHappyIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_happy.png"));
-  private ImageIcon poroSadIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_sad.png"));
-  private ImageIcon poroNeutralIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_neutral.png"));
   // pets
-  private JPanel petHappiness = new JPanel();
-  private JLabel poro = new JLabel();
+  private JLayeredPane petDisplay = new JLayeredPane();
+  private JLayeredPane petHappinessMeter = new JLayeredPane();
+  private JLabel petHappiness = new JLabel();
+  private JLabel currentPetIcon = new JLabel();
   private JButton feedButton = new JButton();
+  private Pet currentPet;
   // others
   private JButton questLog = new JButton();
   private JLayeredPane display = new JLayeredPane();
@@ -51,8 +49,16 @@ public class GUI {
     mainFrame.setVisible(true);
     mainFrame.setLayout(new BorderLayout());
     // questLog button
+
+    Image tempImage = questIcon.getImage(); // transform it
+    Image tempNewImage = tempImage.getScaledInstance(dim.width / 30, dim.width / 30, java.awt.Image.SCALE_SMOOTH); // scale
+                                                                                                                   // it
+                                                                                                                   // the
+                                                                                                                   // smooth
+    // way
+    questIcon = new ImageIcon(tempNewImage); // transform it back
     questLog.setIcon(questIcon);
-    questLog.setBounds(0, 0, 64, 64);
+    questLog.setBounds(0, 0, dim.width / 30, dim.width / 30);
 
     // Add MouseListener to questLog button
     questLog.addMouseListener(new MouseListener() {
@@ -97,7 +103,7 @@ public class GUI {
     snackCountLabel = new JLabel();
     snackCountLabel.setText("Snacks: " + app.getNumTreats());
     snackCountLabel.setIcon(taiyakiIcon);
-    snackCountLabel.setBounds(64, 0, 160, 64);
+    snackCountLabel.setBounds(dim.width / 30, 0, dim.width / 12, dim.width / 30);
 
     date = new JLabel();
     date.setText(app.getDay().toString());
@@ -113,11 +119,34 @@ public class GUI {
     backgroundImage = new ImageIcon(newimg); // transform it back
     background.setIcon(backgroundImage);
     background.setBounds(0, 0, dim.width, dim.height);
+    // displaying pet
+    /*
+     * diplay
+     * what happiness
+     * if >10
+     * display pet happy
+     */
+    // setting up current pet
+    currentPet = app.getPet();
 
+    refreshPet();
+
+    petDisplay.add(currentPetIcon, Integer.valueOf(3));
+    petDisplay.setBounds(0, 0, dim.width / 3, dim.width / 3);
+    petDisplay.setLocation(dim.width / 2 - petDisplay.getSize().width / 2,
+        dim.height / 2 - petDisplay.getSize().height / 2);
+    currentPetIcon.setLocation(petDisplay.getSize().width / 2 - currentPetIcon.getSize().width / 3,
+        petDisplay.getSize().width / 2 - currentPetIcon.getSize().width / 2);
+    // setting up happineesss meter
+    petHappiness.setBackground(new Color(0x04db2c));
+    petHappinessMeter.add(petHappiness, Integer.valueOf(1));
+    petHappinessMeter.setBounds(0, 0, dim.width / 12, dim.height * 2 / 45);
+    petHappinessMeter.setLocation(petDisplay.getSize().width / 2, petDisplay.getSize().height / 2);
+    petDisplay.add(petHappinessMeter, Integer.valueOf(1));
     // feeding button
     feedButton.setBackground(new Color(0x05b331));
     feedButton.setText("Feed");
-    feedButton.setBounds(0, 0, 160, 48);
+    feedButton.setBounds(0, 0, dim.width / 12, dim.height * 2 / 45);
     feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,
         dim.height / 2 + dim.height / 3 - feedButton.getSize().height / 2);
     feedButton.addMouseListener(new MouseListener() {
@@ -125,6 +154,7 @@ public class GUI {
       public void mouseClicked(MouseEvent e) {
         app.feedPet(); // feed pet
         snackCountLabel.setText("Snacks: " + app.getNumTreats());
+        refreshPet();
 
       }
 
@@ -150,8 +180,6 @@ public class GUI {
 
       // ... (other MouseListener methods not required)
     });
-    // pet things
-    poro.setIcon(poroNeutralIcon);
 
     // pass one day
     // Pass one day button
@@ -171,7 +199,7 @@ public class GUI {
     display.add(questLog, Integer.valueOf(1));
     display.add(passOneDayButton, Integer.valueOf(2)); // Add to layered pane with higher index
     display.add(switchPet, Integer.valueOf(1));
-
+    display.add(petDisplay, Integer.valueOf(1));
     // add chore
     addQuestButton = new JButton("+add");
     addQuestButton.setBounds((int) (dim.getWidth() / 2 + dim.getWidth() * 0.15), (int) (dim.getHeight() * 0.7), 100,
@@ -183,13 +211,25 @@ public class GUI {
     mainFrame.add(display);
   }
 
+  public void refreshPet() {
+    currentPet = app.getPet();
+    int happyL = currentPet.getHunger();
+
+    if (happyL >= 10) {
+      currentPetIcon.setIcon(currentPet.getHappyImage());
+    } else if (happyL > 5) {
+      currentPetIcon.setIcon(currentPet.getNeutralImage());
+    } else {
+      currentPetIcon.setIcon(currentPet.getSadImage());
+    }
+
+    currentPetIcon.setBounds(0, 0, 640, 640);
+
+  }
+
   public void rotatePets() {
     app.rotatePet();
-    // ADD UPDATE PET FUNCTION
-    // ADD
-    // HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    // USING THIS REALLY OBNOXIOUS COMMENT
-    // refreshPet();
+    refreshPet();
   }
 
   public void addChore() {
@@ -213,6 +253,7 @@ public class GUI {
    * failed any tasks, and generates new ones.
    */
   private void passDay() {
+
     app.passOneDay();
     for (Chore c : app.listShow()) {
       if (app.getDay().compareTo(c.getDate()) >= 0) {
@@ -224,6 +265,7 @@ public class GUI {
     updateQuestLogPanel();
     date.setText(app.getDay().toString());
 
+    refreshPet();
   }
 
   private void updateQuestLogPanel() {
