@@ -26,6 +26,14 @@ public class Chore {
     return this.done;
   }
 
+  public String getDateString() {
+    return this.assignedDate.toString();
+  }
+
+  public void addToDay(int addVal) {
+    this.assignedDate.plusDays(addVal);
+  }
+
   public String getName() {
     return this.name;
   }

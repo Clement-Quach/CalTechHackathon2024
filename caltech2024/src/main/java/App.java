@@ -36,6 +36,10 @@ public class App {
     petList.add(new Pet(i));
   }
 
+  public void generateNewSide() {
+    myList.add(generator.getQuest());
+  }
+
   /**
    * gets the pet that we currently point to.
    * 
@@ -110,6 +114,10 @@ public class App {
 
   public void addChore(String name, String description) {
     this.myList.add(new Chore(name, description));
+  }
+
+  public void addChore(Chore chr) {
+    this.myList.add(chr);
   }
 
   public Chore getChoreAt(int i) {

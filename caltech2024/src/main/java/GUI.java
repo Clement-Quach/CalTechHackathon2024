@@ -8,13 +8,16 @@ public class GUI {
   // Defining
   private JFrame mainFrame; // creates frame
   private ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/icon.png")); // creates icon
-  private JPanel topBar = new JPanel();
   private JButton questLog = new JButton();
   private ImageIcon questIcon = new ImageIcon(this.getClass().getResource("/images/questLog.png"));
+  private JLayeredPane display = new JLayeredPane();
+  private ImageIcon backgroundImage = new ImageIcon(this.getClass().getResource("/images/background.png"));
+  private JLabel background = new JLabel();
   private App app;
   private JPanel questLogPanel; // Panel for quest log content
   private JButton closeQuestLogButton; // Close button for quest log
   private JLabel snackCountLabel; // Label to display snack count
+  private JButton addQuestButton;
 
   // Main GUI
   public GUI(App app) {
@@ -31,7 +34,7 @@ public class GUI {
 
     // questLog button
     questLog.setIcon(questIcon);
-    questLog.setPreferredSize(new Dimension(64, 64));
+    questLog.setBounds(0, 0, 64, 64);
 
     // Add MouseListener to questLog button
     questLog.addMouseListener(new MouseListener() {
@@ -40,7 +43,8 @@ public class GUI {
         if (questLogPanel == null) {
           createQuestLogPanel();
         }
-        showQuestLogPanel(); // Show or hide quest log panel
+        questLogPanel.setVisible(true);
+        addQuestButton.setVisible(true);
 
       }
 
@@ -67,34 +71,117 @@ public class GUI {
       // ... (other MouseListener methods not required)
     });
 
-    // Top bar
-    topBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-    topBar.setPreferredSize(new Dimension(1600, 100));
-    topBar.setOpaque(false);
-
     GridBagConstraints snackCountConstraints = new GridBagConstraints();
 
     snackCountConstraints.anchor = GridBagConstraints.NORTHEAST; // Anchor to top and east
     snackCountConstraints.insets = new Insets(10, 10, 10, 10); // Add some padding
 
     snackCountLabel = new JLabel("Snacks: " + app.getNumTreats());
-    topBar.add(snackCountLabel);
+    snackCountLabel.setBounds(64, 0, 128, 64);
+    display.add(snackCountLabel, Integer.valueOf(1));
 
-    topBar.add(questLog);
-
+    background.setIcon(backgroundImage);
+    background.setBounds(0, -180, 1920, 1080);
     // Adding components to frame
-    mainFrame.add(topBar, BorderLayout.NORTH);
+    display.add(background, Integer.valueOf(0));
+    display.add(questLog, Integer.valueOf(1));
+    // add chore
+    addQuestButton = new JButton("+add");
+    addQuestButton.setBounds(920, 200, 100, 25);
+    addQuestButton.addActionListener(e -> addChore()); // Print on click
+    display.add(addQuestButton, Integer.valueOf(3)); // Add to layered pane with higher index
+    addQuestButton.setVisible(false);
+
+    mainFrame.add(display);
+  }
+
+  public void addChore() {
+    String nm = showInputDialog("enter name for this quest");
+    String desc = showInputDialog("give this quest a description");
+    String Day = showInputDialog("how many days will this take");
+    Chore c = new Chore(nm, desc);
+    try {
+      int intDay = Integer.parseInt(Day);
+      c.addToDay(intDay);
+    } catch (Exception e) {
+      System.out.println("did not input proper num");
+    }
+    app.addChore(c);
+    updateQuestLogPanel();
+
+  }
+
+  private void updateQuestLogPanel() {
+    if (questLogPanel == null) {
+      return; // Do nothing if quest log panel is not created yet
+    }
+
+    // Clear existing components from the quest log panel
+    questLogPanel.removeAll();
+
+    // Add close button again (optional, can be outside the loop)
+    questLogPanel.add(closeQuestLogButton);
+
+    // Loop through each chore in the quest log
+    for (Chore chore : app.listShow()) {
+      // Create a button with chore name
+      JButton choreButton = new JButton(chore.getName());
+      choreButton.addActionListener(e -> completeChore(chore)); // Print on click
+
+      // Set button properties (optional)
+      // choreButton.setForeground(new Color(chore.getRGB()[0], chore.getRGB()[1],
+      // chore.getRGB()[2]));
+
+      String wrappedDescription = wrapTextByWords(chore.getDescription(), 20);
+      JLabel descriptionLabel = new JLabel("<html>" + wrappedDescription + "</html>");
+      descriptionLabel
+          .setPreferredSize(new Dimension(mainFrame.getWidth() - choreButton.getPreferredSize().width - 20, 0));
+      JLabel dueDate = new JLabel("Due: " + chore.getDateString());
+      // Add components to questLogPanel
+      questLogPanel.add(choreButton);
+      questLogPanel.add(descriptionLabel);
+      questLogPanel.add(dueDate);
+    }
+
+    // revalidate and repaint the quest log panel to reflect changes
+    questLogPanel.revalidate();
+    questLogPanel.repaint();
+    System.out.println("after update");
+  }
+
+  public String showInputDialog(String message1) {
+    // Use JOptionPane for user input dialog
+    String userInput = JOptionPane.showInputDialog(mainFrame, message1);
+    return userInput;
   }
 
   private void completeChore(Chore c) {
-    this.app.completeTask(app.findChore(c));
-    snackCountLabel.setText("Snacks: " + app.getNumTreats());
+
+    if (showConfirmationDialog("are you done this chore?") == 0) {
+      this.app.completeTask(app.findChore(c));
+      snackCountLabel.setText("Snacks: " + app.getNumTreats());
+      this.app.removeChore(c);
+      updateQuestLogPanel();
+    }
+
+  }
+
+  public int showConfirmationDialog(String message) {
+    // Create confirmation dialog with options and custom icon (optional)
+    int confirmDialog = JOptionPane.showConfirmDialog(
+        mainFrame, // Parent component for the dialog
+        message, // Message to display
+        "Confirmation", // Dialog title
+        JOptionPane.YES_NO_OPTION, // Option types (YES_NO, OK_CANCEL, etc.)
+        JOptionPane.QUESTION_MESSAGE // Message type icon (INFORMATION, WARNING, QUESTION, etc.)
+    );
+    return confirmDialog;
   }
 
   private void createQuestLogPanel() {
     questLogPanel = new JPanel();
     questLogPanel.setLayout(new BoxLayout(questLogPanel, BoxLayout.Y_AXIS)); // Use BoxLayout
-    questLogPanel.setOpaque(false); // Make panel transparent
+    questLogPanel.setOpaque(true); // Make panel transparent
 
     // Create close button
     closeQuestLogButton = new JButton("X");
@@ -118,26 +205,25 @@ public class GUI {
       JLabel descriptionLabel = new JLabel("<html>" + wrappedDescription + "</html>");
       descriptionLabel
           .setPreferredSize(new Dimension(mainFrame.getWidth() - choreButton.getPreferredSize().width - 20, 0));
+      JLabel dueDate = new JLabel("Due: " + chore.getDateString());
 
       // Add components to questLogPanel
       questLogPanel.add(choreButton);
       questLogPanel.add(descriptionLabel);
+      questLogPanel.add(dueDate);
+
     }
 
     // Add questLogPanel to main frame (but don't set visible yet)
-    mainFrame.add(questLogPanel);
-  }
-
-  private void showQuestLogPanel() {
-    if (questLogPanel == null) {
-      createQuestLogPanel();
-    }
-    questLogPanel.setVisible(!questLogPanel.isVisible()); // Toggle visibility
+    questLogPanel.setBounds(300, 200, 780, 500);
+    ;
+    display.add(questLogPanel, Integer.valueOf(2));
   }
 
   private void hideQuestLogPanel() {
     if (questLogPanel != null) {
       questLogPanel.setVisible(false);
+      addQuestButton.setVisible(false);
     }
   }
 
