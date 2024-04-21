@@ -104,8 +104,7 @@ public class GUI {
     feedButton.setBackground(new Color(0x05b331));
     feedButton.setText("Feed");
     feedButton.setBounds(0, 0, 160, 48);
-    feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,
-        dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
+    feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
     feedButton.addMouseListener(new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
