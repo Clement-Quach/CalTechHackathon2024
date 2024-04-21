@@ -12,7 +12,8 @@ public class GUI {
   // images
   private ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/icon.png")); // logo icon
   private ImageIcon questIcon = new ImageIcon(this.getClass().getResource("/images/questLog.png")); // questlogicon
-  private ImageIcon backgroundImage = new ImageIcon(this.getClass().getResource("/images/background.png")); // background image
+  private ImageIcon backgroundImage = new ImageIcon(this.getClass().getResource("/images/background.png")); // background
+                                                                                                            // image
   private ImageIcon taiyakiIcon = new ImageIcon(this.getClass().getResource("/images/taiyaki.png")); // taiyaki image
   // poro images
   private ImageIcon poroHappyIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_happy.png"));
@@ -29,9 +30,14 @@ public class GUI {
   private App app;
   private JPanel questLogPanel; // Panel for quest log content
   private JButton closeQuestLogButton; // Close button for quest log
+  private JLabel date;
   private JLabel snackCountLabel; // Label to display snack count
   Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
   private JButton addQuestButton;
+  // move 1 day
+  private JButton passOneDayButton;
+  // rotate pets
+  private JButton switchPet;
 
   // Main GUI
   public GUI(App app) {
@@ -92,11 +98,19 @@ public class GUI {
     snackCountLabel.setText("Snacks: " + app.getNumTreats());
     snackCountLabel.setIcon(taiyakiIcon);
     snackCountLabel.setBounds(64, 0, 160, 64);
+
+    date = new JLabel();
+    date.setText(app.getDay().toString());
+    date.setBounds((int) dim.getWidth() - 100, 30, 100, 30);
+
+    // add display counters
+    display.add(date, Integer.valueOf(1));
     display.add(snackCountLabel, Integer.valueOf(1));
 
-    Image image = backgroundImage.getImage(); // transform it 
-    Image newimg = image.getScaledInstance(dim.width, dim.height,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-    backgroundImage = new ImageIcon(newimg);  // transform it back
+    Image image = backgroundImage.getImage(); // transform it
+    Image newimg = image.getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH); // scale it the smooth
+                                                                                                // way
+    backgroundImage = new ImageIcon(newimg); // transform it back
     background.setIcon(backgroundImage);
     background.setBounds(0, 0, dim.width, dim.height);
 
@@ -104,7 +118,8 @@ public class GUI {
     feedButton.setBackground(new Color(0x05b331));
     feedButton.setText("Feed");
     feedButton.setBounds(0, 0, 160, 48);
-    feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
+    feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,
+        dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
     feedButton.addMouseListener(new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
@@ -137,10 +152,26 @@ public class GUI {
     });
     // pet things
     poro.setIcon(poroNeutralIcon);
+
+    // pass one day
+    // Pass one day button
+    passOneDayButton = new JButton("Pass One Day");
+    passOneDayButton.setBounds((int) dim.getWidth() - 200, 60, 200, 30);
+    passOneDayButton.addActionListener(e -> passDay());
+
+    // switch pets
+    switchPet = new JButton("change pet");
+    switchPet.setBounds((int) dim.getWidth() - 100, (int) dim.getHeight() - 200, 100, 70);
+
+    switchPet.addActionListener(e -> rotatePets());
+
     // Adding components to frame
     display.add(feedButton, Integer.valueOf(1));
     display.add(background, Integer.valueOf(0));
     display.add(questLog, Integer.valueOf(1));
+    display.add(passOneDayButton, Integer.valueOf(2)); // Add to layered pane with higher index
+    display.add(switchPet, Integer.valueOf(1));
+
     // add chore
     addQuestButton = new JButton("+add");
     addQuestButton.setBounds(920, 200, 100, 25);
@@ -149,6 +180,15 @@ public class GUI {
     addQuestButton.setVisible(false);
 
     mainFrame.add(display);
+  }
+
+  public void rotatePets() {
+    app.rotatePet();
+    // ADD UPDATE PET FUNCTION
+    // ADD
+    // HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // USING THIS REALLY OBNOXIOUS COMMENT
+    // refreshPet();
   }
 
   public void addChore() {
@@ -164,6 +204,24 @@ public class GUI {
     }
     app.addChore(c);
     updateQuestLogPanel();
+
+  }
+
+  /**
+   * move forward one day. this increments the current date by 1, checks if you've
+   * failed any tasks, and generates new ones.
+   */
+  private void passDay() {
+    app.passOneDay();
+    for (Chore c : app.listShow()) {
+      if (app.getDay().compareTo(c.getDate()) >= 0) {
+        app.removeChore(c);
+      }
+    }
+
+    app.generateNewSide();
+    updateQuestLogPanel();
+    date.setText(app.getDay().toString());
 
   }
 

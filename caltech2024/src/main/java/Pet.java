@@ -21,8 +21,12 @@ public class Pet {
    * a way to call feedPet() with a default value of 1.
    */
   public void feedPet() {
-    System.out.println(" feed tests" + this.hunger);
+
     this.hunger += 1;
+  }
+
+  public void feedPet(int i) {
+    this.hunger += i;
   }
 
   public int getId() {
