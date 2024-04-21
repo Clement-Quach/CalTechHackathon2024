@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
 public class GUI {
 
@@ -11,8 +12,7 @@ public class GUI {
   // images
   private ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/icon.png")); // logo icon
   private ImageIcon questIcon = new ImageIcon(this.getClass().getResource("/images/questLog.png")); // questlogicon
-  private ImageIcon backgroundImage = new ImageIcon(this.getClass().getResource("/images/background.png")); // background
-                                                                                                            // image
+  private ImageIcon backgroundImage = new ImageIcon(this.getClass().getResource("/images/background.png")); // background image
   private ImageIcon taiyakiIcon = new ImageIcon(this.getClass().getResource("/images/taiyaki.png")); // taiyaki image
   // poro images
   private ImageIcon poroHappyIcon = new ImageIcon(this.getClass().getResource("/images/pets/poro/poro_happy.png"));
@@ -94,6 +94,9 @@ public class GUI {
     snackCountLabel.setBounds(64, 0, 160, 64);
     display.add(snackCountLabel, Integer.valueOf(1));
 
+    Image image = backgroundImage.getImage(); // transform it 
+    Image newimg = image.getScaledInstance(dim.width, dim.height,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+    backgroundImage = new ImageIcon(newimg);  // transform it back
     background.setIcon(backgroundImage);
     background.setBounds(0, 0, dim.width, dim.height);
 
@@ -303,4 +306,5 @@ public class GUI {
     }
     return sb.toString().trim(); // Remove trailing space
   }
+
 }
