@@ -67,8 +67,11 @@ public class App {
   public void completeTask(int i) {
     int temp = myList.getChoreAt(i).getTreatVal();
 
-    myList.choreComplete(i);
-    rewardSystem.completeTask(temp);
+    if (myList.choreComplete(i)) {
+
+      rewardSystem.completeTask(temp);
+    }
+
   }
 
   /**

@@ -50,10 +50,12 @@ public class ChoresList {
   /**
    * complete the chore at index i
    */
-  public void choreComplete(int i) {
+  public boolean choreComplete(int i) {
     if (!list.get(i).getCompletion()) {
       list.get(i).setCompletion(true);
+      return true;
     }
+    return false;
   }
 
   public int findChore(Chore c) {

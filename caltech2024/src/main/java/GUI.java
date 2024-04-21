@@ -70,6 +70,7 @@ public class GUI {
     // Top bar
     topBar.setLayout(new FlowLayout(FlowLayout.LEFT));
     topBar.setPreferredSize(new Dimension(1600, 100));
+    topBar.setOpaque(false);
 
     GridBagConstraints snackCountConstraints = new GridBagConstraints();
 
