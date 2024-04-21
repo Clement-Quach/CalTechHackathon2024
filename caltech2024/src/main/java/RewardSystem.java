@@ -4,7 +4,7 @@ public class RewardSystem {
   private final int choresPerTreat = 5;
 
   public RewardSystem() {
-    numOfBiscuts = 1;
+    numOfBiscuts = 2;
   }
 
   public void completeTask(int val) {

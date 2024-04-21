@@ -18,20 +18,11 @@ public class Pet {
   }
 
   /**
-   * feed the pet to make it not hungry. adds the value of feed value to the pet
-   * 
-   * @param feedValue the value that we are going to increase the hunger variable
-   *                  by
-   */
-  public void feedPet(int feedValue) {
-    this.hunger += feedValue;
-  }
-
-  /**
    * a way to call feedPet() with a default value of 1.
    */
   public void feedPet() {
-    feedPet(1);
+    System.out.println(" feed tests" + this.hunger);
+    this.hunger += 1;
   }
 
   public int getId() {

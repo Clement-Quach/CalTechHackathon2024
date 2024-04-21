@@ -85,7 +85,8 @@ public class App {
    */
   public void feedPet() {
     if (this.rewardSystem.getNumTreats() > 0) {
-      petList.get(currentPet).feedPet(1);
+
+      petList.get(currentPet).feedPet();
       this.rewardSystem.useTreat();
     }
   }
