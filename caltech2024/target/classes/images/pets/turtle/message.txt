@@ -1,37 +1,4 @@
-import java.util.Random;
-
-public class SideQuestGenerator {
-
-  private static int status = 0;
-
-  public SideQuest getQuest() {
-
-    status++;
-    return getQuest(status);
-  }
-
-  public SideQuest getQuest(int day) {
-    if (day % 365 == 0) {
-      return generateRandomYearly();
-    }
-    if (day % 7 == 0) {
-      return generateRandomWeekly();
-    }
-
-    return generateRandomDaily();
-  }
-
-  public SideQuestGenerator() {
-
-  }
-
-  private SideQuest generateRandomDaily() {
-    SideQuest sideQuest = new SideQuest();
-    Random rand = new Random();
-
-    int choice = rand.nextInt(1, 20);
-
-    switch (choice) {
+   switch (choice) {
       case 1:
         sideQuest = new SideQuest("Wash the Dishes",
             "Finally go wash up all those saved up dishes of yours.",
@@ -247,4 +214,3 @@ public class SideQuestGenerator {
     sideQuest.setName("Yearly Quest!: " + sideQuest.getName());
     return sideQuest;
   }
-}
