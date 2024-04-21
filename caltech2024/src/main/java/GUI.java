@@ -23,8 +23,6 @@ public class GUI {
   private JLabel poro = new JLabel();
   private JButton feedButton = new JButton();
   // others
-  GraphicsEnvironment graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
-  GraphicsDevice device = graphics.getDefaultScreenDevice();
   private JButton questLog = new JButton();
   private JLayeredPane display = new JLayeredPane();
   private JLabel background = new JLabel();
@@ -46,7 +44,6 @@ public class GUI {
     mainFrame.setIconImage(icon.getImage());
     mainFrame.setVisible(true);
     mainFrame.setLayout(new BorderLayout());
-    device.setFullScreenWindow(mainFrame);
     // questLog button
     questLog.setIcon(questIcon);
     questLog.setBounds(0, 0, 64, 64);
@@ -98,14 +95,14 @@ public class GUI {
     display.add(snackCountLabel, Integer.valueOf(1));
 
     background.setIcon(backgroundImage);
-    background.setBounds(0, -180, 1920, 1080);
+    background.setBounds(0, 0, dim.width, dim.height);
 
     // feeding button
     feedButton.setBackground(new Color(0x05b331));
     feedButton.setText("Feed");
     feedButton.setBounds(0, 0, 160, 48);
     feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,
-        dim.height / 2 + 250 - feedButton.getSize().height / 2);
+        dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
     feedButton.addMouseListener(new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
