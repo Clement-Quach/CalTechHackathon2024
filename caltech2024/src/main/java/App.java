@@ -1,11 +1,14 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class App {
-
+  private LocalDate today;
   private Pet pet;
   private ChoresList myList;
   private RewardSystem rewardSystem;
   private SideQuestGenerator generator;
+
+  private final int petReduce = 2;
 
   /**
    * the current index of the pet we are dealing with.
@@ -14,15 +17,18 @@ public class App {
   private ArrayList<Pet> petList = new ArrayList<>();
 
   public App() {
-
+    today = LocalDate.now();
     pet = new Pet(1);
     petList.add(pet);
+    petList.add(new Pet(2));
+    petList.add(new Pet(3));
     myList = new ChoresList();
     rewardSystem = new RewardSystem();
     generator = new SideQuestGenerator();
 
     myList.add(generator.getQuest(365));
     myList.add(generator.getQuest(7));
+    myList.add(generator.getQuest(1));
     myList.add(generator.getQuest(1));
   }
 
@@ -36,8 +42,34 @@ public class App {
     petList.add(new Pet(i));
   }
 
+  public void passOneDay() {
+    today = today.plusDays(1);
+    for (int i = 0; i < petList.size(); i++) {
+      petList.get(i).feedPet(petReduce);
+    }
+
+  }
+
+  public LocalDate getDay() {
+    return this.today;
+  }
+
   public void generateNewSide() {
-    myList.add(generator.getQuest());
+    Chore temp = generator.getQuest();
+
+    myList.add(temp);
+  }
+
+  /**
+   * rotate the pet that is displayed
+   * 
+   * @return
+   */
+  public void rotatePet() {
+    currentPet++;
+    if (currentPet > petList.size()) {
+      currentPet = 1;
+    }
   }
 
   /**
@@ -114,10 +146,11 @@ public class App {
   }
 
   public void addChore(String name, String description) {
-    this.myList.add(new Chore(name, description));
+    this.myList.add(new Chore(name, description, this.getDay()));
   }
 
   public void addChore(Chore chr) {
+    chr.assignedDate = this.getDay();
     this.myList.add(chr);
   }
 
@@ -141,4 +174,5 @@ public class App {
     int i = myList.findChore(c);
     return i;
   }
+
 }

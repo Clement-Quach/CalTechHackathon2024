@@ -15,11 +15,17 @@ public class Chore {
   }
 
   public Chore(String name, String desc) {
+
     this.done = false;
     this.assignedDate = LocalDate.now();
     this.name = name;
     this.description = desc;
     this.treatValue = 1;
+  }
+
+  public Chore(String name, String desc, LocalDate day) {
+    this(name, desc);
+    this.assignedDate = day;
   }
 
   public boolean getCompletion() {

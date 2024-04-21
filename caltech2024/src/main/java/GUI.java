@@ -34,6 +34,10 @@ public class GUI {
   private JLabel snackCountLabel; // Label to display snack count
   Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
   private JButton addQuestButton;
+  // move 1 day
+  private JButton passOneDayButton;
+  // rotate pets
+  private JButton switchPet;
 
   // Main GUI
   public GUI(App app) {
@@ -138,10 +142,25 @@ public class GUI {
     });
     // pet things
     poro.setIcon(poroNeutralIcon);
+
+    // pass one day
+    // Pass one day button
+    passOneDayButton = new JButton("Pass One Day");
+    passOneDayButton.setBounds(0, 800, 100, 30);
+    passOneDayButton.addActionListener(e -> passDay());
+
+    // switch pets
+    switchPet = new JButton("change pet");
+    switchPet.setBounds(1200, 0, 100, 100);
+    switchPet.addActionListener(e -> rotatePets());
+
     // Adding components to frame
     display.add(feedButton, Integer.valueOf(1));
     display.add(background, Integer.valueOf(0));
     display.add(questLog, Integer.valueOf(1));
+    display.add(passOneDayButton, Integer.valueOf(2)); // Add to layered pane with higher index
+    display.add(switchPet, Integer.valueOf(1));
+
     // add chore
     addQuestButton = new JButton("+add");
     addQuestButton.setBounds(920, 200, 100, 25);
@@ -150,6 +169,15 @@ public class GUI {
     addQuestButton.setVisible(false);
 
     mainFrame.add(display);
+  }
+
+  public void rotatePets() {
+    app.rotatePet();
+    // ADD UPDATE PET FUNCTION
+    // ADD
+    // HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // USING THIS REALLY OBNOXIOUS COMMENT
+    // refreshPet();
   }
 
   public void addChore() {
@@ -164,6 +192,23 @@ public class GUI {
       System.out.println("did not input proper num");
     }
     app.addChore(c);
+    updateQuestLogPanel();
+
+  }
+
+  /**
+   * move forward one day. this increments the current date by 1, checks if you've
+   * failed any tasks, and generates new ones.
+   */
+  private void passDay() {
+    app.passOneDay();
+    for (Chore c : app.listShow()) {
+      if (app.getDay().compareTo(c.getDate()) >= 0) {
+        app.removeChore(c);
+      }
+    }
+
+    app.generateNewSide();
     updateQuestLogPanel();
 
   }
