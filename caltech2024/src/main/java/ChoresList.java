@@ -13,10 +13,12 @@ public class ChoresList {
 
   public void add(Chore chr) {
     list.add(chr);
+    ChoresCount++;
   }
 
   public void remove(Chore chr) {
     list.remove(chr);
+    ChoresCount--;
   }
 
   public Chore getChoreAt(int i) {
@@ -41,14 +43,21 @@ public class ChoresList {
   }
 
   public int getSize() {
-    return ChoresCount;
+    System.out.println(list.size());
+    return list.size();
   }
 
   /**
    * complete the chore at index i
    */
   public void choreComplete(int i) {
-    list.get(i).setCompletion(true);
+    if (!list.get(i).getCompletion()) {
+      list.get(i).setCompletion(true);
+    }
+  }
+
+  public int findChore(Chore c) {
+    return list.indexOf(c);
   }
 
 }
