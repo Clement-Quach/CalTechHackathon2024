@@ -16,7 +16,6 @@ public class GUI {
   private ImageIcon taiyakiIcon = new ImageIcon(this.getClass().getResource("/images/taiyaki.png")); // taiyaki image
   // pets
   private JLayeredPane petDisplay = new JLayeredPane();
-  private JLayeredPane petHappinessMeter = new JLayeredPane();
   private JLabel petHappiness = new JLabel();
   private JLabel currentPetIcon = new JLabel();
   private JButton feedButton = new JButton();
@@ -126,18 +125,22 @@ public class GUI {
     Pet currentPet = app.getPet();
     int currentID = currentPet.getId();
     currentPetIcon.setIcon(currentPet.getNeutralImage());
-    currentPetIcon.setBounds(0,0,640,640);
-    
+    currentPetIcon.setBounds(0,0,dim.width/4,dim.width/4);
     petDisplay.add(currentPetIcon,Integer.valueOf(3));
     petDisplay.setBounds(0,0,dim.width /3,dim.width /3);
     petDisplay.setLocation(dim.width / 2 - petDisplay.getSize().width / 2, dim.height / 2  - petDisplay.getSize().height / 2);
-    currentPetIcon.setLocation(petDisplay.getSize().width / 2 -currentPetIcon.getSize().width/3,petDisplay.getSize().width / 2 -currentPetIcon.getSize().width/2);
-    //setting up happineesss meter
-    petHappiness.setBackground(new Color(0x04db2c));
-    petHappinessMeter.add(petHappiness,Integer.valueOf(1));
-    petHappinessMeter.setBounds(0,0,dim.width/12,dim.height*2/45);
-    petHappinessMeter.setLocation(petDisplay.getSize().width / 2, petDisplay.getSize().height / 2 );
-    petDisplay.add(petHappinessMeter,Integer.valueOf(1));
+    currentPetIcon.setLocation(petDisplay.getSize().width / 2 -currentPetIcon.getSize().width/4,petDisplay.getSize().width / 2 -currentPetIcon.getSize().width/2);
+    //setting up happineesss
+    petHappiness.setBackground(new Color(0xFFFFFF));
+    petHappiness.setBounds(0, 0,dim.width/10,dim.height/40);
+    petHappiness.setText("Happiness: " +currentPet.getHunger() + "/20" );
+    petHappiness.setFont(new Font(petHappiness.getFont().getName(),petHappiness.getFont().getStyle(),30));
+    petHappiness.setHorizontalAlignment(SwingConstants.CENTER);
+    petHappiness.setVerticalAlignment(SwingConstants.CENTER);
+    petHappiness.setOpaque(true);
+    petDisplay.add(petHappiness,Integer.valueOf(5));
+    petHappiness.setLocation(petDisplay.getSize().width / 2 -petHappiness.getSize().width/2,petDisplay.getSize().width / 2 -petHappiness.getSize().width/2-dim.width/12);
+
     // feeding button
     feedButton.setBackground(new Color(0x05b331));
     feedButton.setText("Feed");
