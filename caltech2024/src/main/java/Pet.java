@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 
 public class Pet {
   private int hunger = 7;
+  private int mood = 2;
 
   private final int petID;
   protected ImageIcon imageHappy;
@@ -28,8 +29,11 @@ public class Pet {
    * a way to call feedPet() with a default value of 1.
    */
   public void feedPet() {
-
     this.hunger += 1;
+    if (this.hunger >= 20) {
+      this.mood = 3;
+      this.hunger = 20;
+    }
   }
 
   public void feedPet(int i) {
@@ -37,6 +41,16 @@ public class Pet {
     if (this.hunger < 0) {
       this.hunger = 0;
     }
+    if (this.hunger <= 5) {
+      this.mood = 1;
+    } else if (this.hunger <= 10) {
+      this.mood = 2;
+    }
+
+  }
+
+  public int getMoodThreshold() {
+    return this.mood;
   }
 
   public int getId() {

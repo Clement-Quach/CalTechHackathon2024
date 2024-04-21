@@ -48,7 +48,7 @@ public class App {
     today = today.plusDays(1);
     for (int i = 0; i < petList.size(); i++) {
       petList.get(i).feedPet(petReduce);
-      System.out.println(petList.get(i).getHunger());
+
     }
 
   }
