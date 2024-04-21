@@ -1,7 +1,7 @@
 public class Pet {
   private int hunger = 10;
 
-  public final int petID;
+  private final int petID;
 
   public Pet(int i) {
     petID = i;

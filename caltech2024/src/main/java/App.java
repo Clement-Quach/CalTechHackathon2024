@@ -2,6 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class App {
+  private int counter = 1;
   private LocalDate today;
   private Pet pet;
   private ChoresList myList;
@@ -19,6 +20,7 @@ public class App {
   public App() {
     today = LocalDate.now();
     pet = new Pet(1);
+
     petList.add(pet);
     petList.add(new Pet(2));
     petList.add(new Pet(3));
@@ -43,6 +45,7 @@ public class App {
   }
 
   public void passOneDay() {
+    counter++;
     today = today.plusDays(1);
     for (int i = 0; i < petList.size(); i++) {
       petList.get(i).feedPet(petReduce);
@@ -56,8 +59,16 @@ public class App {
 
   public void generateNewSide() {
     Chore temp = generator.getQuest();
+    if (counter % 365 == 0) {
+      myList.add(generator.getQuest(365));
+    }
+    if (counter % 7 == 0) {
+      myList.add(generator.getQuest(7));
 
-    myList.add(temp);
+    }
+    myList.add(generator.getQuest(1));
+    myList.add(generator.getQuest(1));
+
   }
 
   /**
@@ -77,8 +88,8 @@ public class App {
    * 
    * @return the ID of the current pet.
    */
-  public int getPet() {
-    return petList.get(currentPet).petID;
+  public Pet getPet() {
+    return petList.get(currentPet);
   }
 
   public int getListSize() {
@@ -150,7 +161,7 @@ public class App {
   }
 
   public void addChore(Chore chr) {
-    chr.assignedDate = this.getDay();
+
     this.myList.add(chr);
   }
 

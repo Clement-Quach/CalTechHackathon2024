@@ -119,7 +119,7 @@ public class GUI {
     feedButton.setText("Feed");
     feedButton.setBounds(0, 0, 160, 48);
     feedButton.setLocation(dim.width / 2 - feedButton.getSize().width / 2,
-        dim.height / 2 +dim.height/3 - feedButton.getSize().height / 2);
+        dim.height / 2 + dim.height / 3 - feedButton.getSize().height / 2);
     feedButton.addMouseListener(new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
@@ -156,7 +156,7 @@ public class GUI {
     // pass one day
     // Pass one day button
     passOneDayButton = new JButton("Pass One Day");
-    passOneDayButton.setBounds((int) dim.getWidth() - 200, 60, 200, 30);
+    passOneDayButton.setBounds((int) (dim.getWidth() - dim.getWidth() * 0.2), 60, (int) (dim.getWidth() * 0.2), 30);
     passOneDayButton.addActionListener(e -> passDay());
 
     // switch pets
@@ -174,7 +174,8 @@ public class GUI {
 
     // add chore
     addQuestButton = new JButton("+add");
-    addQuestButton.setBounds(920, 200, 100, 25);
+    addQuestButton.setBounds((int) (dim.getWidth() / 2 + dim.getWidth() * 0.15), (int) (dim.getHeight() * 0.7), 100,
+        25);
     addQuestButton.addActionListener(e -> addChore()); // Print on click
     display.add(addQuestButton, Integer.valueOf(3)); // Add to layered pane with higher index
     addQuestButton.setVisible(false);
@@ -260,7 +261,7 @@ public class GUI {
     // revalidate and repaint the quest log panel to reflect changes
     questLogPanel.revalidate();
     questLogPanel.repaint();
-    System.out.println("after update");
+
   }
 
   public String showInputDialog(String message1) {
